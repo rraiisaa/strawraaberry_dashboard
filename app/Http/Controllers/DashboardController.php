@@ -11,7 +11,9 @@ class DashboardController extends Controller
     private function income(?int $m = null, ?int $y = null): int
     {
         $cf = CashFlow::where('type', 'income');
-        $st = SalesTransaction::whereNull('store_id');
+        // Penjualan dari Aliran Dana sudah punya catatan kas sendiri; jangan dihitung dua kali.
+        $linked = CashFlow::where('source_type', 'sales_transaction')->pluck('source_id');
+        $st = SalesTransaction::whereNull('store_id')->whereNotIn('id', $linked);
         if ($y) { $cf->whereYear('date', $y); $st->whereYear('date', $y); }
         if ($m) { $cf->whereMonth('date', $m); $st->whereMonth('date', $m); }
         return (int) $cf->sum('amount') + (int) $st->sum('total_amount');

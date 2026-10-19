@@ -17,7 +17,7 @@
                 <input type="search" name="q" value="{{ request('q') }}" placeholder="Cari nama, lokasi, detail" class="input !w-56">
                 <button class="btn-soft">Cari</button>
             </form>
-            <button @click="edit = blank(); form = true" class="btn"><i data-lucide="plus" class="h-4 w-4"></i> Vendor baru</button>
+            <button x-on:click="edit = blank(); form = true" class="btn"><i data-lucide="plus" class="h-4 w-4"></i> Vendor baru</button>
         </div>
     </div>
 
@@ -33,8 +33,8 @@
                         </div>
                     </div>
                     <div class="flex gap-1">
-                        <button @click='edit = @json($v->only(["id","name","contact","social_media","cost_price","detail","location"]); form = true' class="rounded-lg bg-lav p-1.5" title="Edit"><i data-lucide="pencil" class="h-4 w-4"></i></button>
-                        <form method="POST" action="{{ route('vendors.destroy', $v) }}" onsubmit="return confirm('Hapus {{ $v->name }}?')">@csrf @method('DELETE')<button class="rounded-lg bg-berry-soft/50 p-1.5" title="Hapus"><i data-lucide="trash-2" class="h-4 w-4"></i></button></form>
+                        <button type="button" data-row="{{ json_encode($v->only(['id','name','contact','social_media','cost_price','detail','location'])) }}" x-on:click="edit = JSON.parse($el.dataset.row); form = true" class="rounded-lg bg-lav p-1.5" title="Edit"><i data-lucide="pencil" class="h-4 w-4"></i></button>
+                        <form method="POST" action="{{ route('vendors.destroy', $v) }}" data-confirm="Hapus {{ $v->name }}?" data-confirm-title="Hapus data ini?" data-confirm-type="danger" data-confirm-ok="Ya, hapus">{{ csrf_field() }} {{ method_field('DELETE') }}<button class="rounded-lg bg-berry-soft/50 p-1.5" title="Hapus"><i data-lucide="trash-2" class="h-4 w-4"></i></button></form>
                     </div>
                 </div>
 
@@ -57,9 +57,9 @@
         @endforelse
     </div>
 
-    <div x-show="form" x-cloak x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-cocoa/40 p-4" @keydown.escape.window="form = false">
-        <form method="POST" :action="edit.id ? '{{ url('vendor') }}/' + edit.id : '{{ route('vendors.store') }}'" @click.outside="form = false" class="card max-h-[90vh] w-full max-w-md space-y-3 overflow-y-auto">
-            @csrf
+    <div x-show="form" x-cloak x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-cocoa/40 p-4" x-on:keydown.escape.window="form = false">
+        <form method="POST" :action="edit.id ? '{{ url('vendor') }}/' + edit.id : '{{ route('vendors.store') }}'" x-on:click.outside="form = false" class="card max-h-[90vh] w-full max-w-md space-y-3 overflow-y-auto">
+            {{ csrf_field() }}
             <template x-if="edit.id"><input type="hidden" name="_method" value="PUT"></template>
             <h3 class="font-display text-xl font-semibold" x-text="edit.id ? 'Edit vendor' : 'Vendor baru'"></h3>
             <div><label class="label">Nama vendor</label><input name="name" x-model="edit.name" required class="input"></div>
@@ -70,7 +70,7 @@
             <div><label class="label">Harga pokok (Rp)</label><input type="number" min="0" name="cost_price" x-model.number="edit.cost_price" required class="input"></div>
             <div><label class="label">Lokasi</label><input name="location" x-model="edit.location" class="input"></div>
             <div><label class="label">Detail</label><textarea name="detail" x-model="edit.detail" rows="3" class="input" placeholder="Barang yang disuplai, minimal order, lead time, catatan"></textarea></div>
-            <div class="flex justify-end gap-2"><button type="button" @click="form=false" class="btn-soft">Batal</button><button class="btn">Simpan</button></div>
+            <div class="flex justify-end gap-2"><button type="button" x-on:click="form=false" class="btn-soft">Batal</button><button class="btn">Simpan</button></div>
         </form>
     </div>
 </div>

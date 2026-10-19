@@ -7,5 +7,5 @@ class CashFlow extends Model
     protected $guarded = [];
     protected $casts = ['date' => 'date'];
     public const INCOME_CATEGORIES  = ['Penjualan Langsung', 'Pelunasan Mitra', 'Lainnya'];
-    public const EXPENSE_CATEGORIES = ['Bahan Baku', 'Packaging', 'Desain', 'Operasional', 'Fee Mitra'];
+    public const EXPENSE_CATEGORIES = ['Bahan Baku', 'Packaging', 'RnD', 'Operasional', 'Fee Mitra'];
 }

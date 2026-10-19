@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
                 });
                 $trx->update(['total_amount' => $total]);
             }
-            foreach (['Bahan Baku', 'Packaging', 'Desain'] as $cat)
+            foreach (['Bahan Baku', 'Packaging', 'RnD'] as $cat)
                 CashFlow::create(['type' => 'expense', 'category' => $cat, 'amount' => rand(100, 450) * 1000, 'description' => "Belanja $cat", 'date' => now()->setMonth($m)->setDay(rand(1, 25))]);
         }
     }

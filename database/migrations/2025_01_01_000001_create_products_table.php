@@ -8,7 +8,7 @@ return new class extends Migration {
         Schema::create('products', function (Blueprint $t) {
             $t->id();
             $t->string('name');
-            $t->enum('category', ['Pin', 'Sticker', 'Lanyard', 'Hairclip', 'Notepad']);
+            $t->string('category', 40);
             $t->unsignedInteger('cost_price')->default(0);    // HPP
             $t->unsignedInteger('selling_price');
             $t->integer('stock_qty')->default(0);             // stok aktif (layak jual)

@@ -12,10 +12,10 @@
 
     <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-            <h1 class="font-display text-3xl font-semibold">Halo, Strawraaberry!</h1>
+            <h1 class="font-display text-3xl font-semibold">Hai, Rai!</h1>
             <p class="text-sm font-semibold text-cocoa/60">Ringkasan usaha kamu hari ini.</p>
         </div>
-        <button @click="quick = true" class="btn"><i data-lucide="plus" class="h-4 w-4"></i> Catat kas cepat</button>
+        <button x-on:click="quick = true" class="btn"><i data-lucide="plus" class="h-4 w-4"></i> Catat kas cepat</button>
     </div>
 
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -50,8 +50,8 @@
         <div class="mb-3 flex items-center justify-between">
             <h2 class="font-display text-xl font-semibold">Tren Pemasukan vs Pengeluaran {{ $year }}</h2>
             <div class="flex gap-1 rounded-xl bg-cloud p-1 text-xs font-bold" x-data="{ mode: 'line' }" x-init="$watch('mode', m => window.switchChart(m))">
-                <button @click="mode='line'" :class="mode==='line' && 'bg-white shadow'" class="rounded-lg px-3 py-1">Garis</button>
-                <button @click="mode='bar'" :class="mode==='bar' && 'bg-white shadow'" class="rounded-lg px-3 py-1">Batang</button>
+                <button x-on:click="mode='line'" :class="mode==='line' && 'bg-white shadow'" class="rounded-lg px-3 py-1">Garis</button>
+                <button x-on:click="mode='bar'" :class="mode==='bar' && 'bg-white shadow'" class="rounded-lg px-3 py-1">Batang</button>
             </div>
         </div>
         <div class="h-72"><canvas id="trendChart"></canvas></div>
@@ -104,9 +104,9 @@
     </section>
     @endif
 
-    <div x-show="quick" x-cloak x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-cocoa/40 p-4" @keydown.escape.window="quick = false">
-        <form method="POST" action="{{ route('cashflow.store') }}" @click.outside="quick = false" class="card w-full max-w-md space-y-3">
-            @csrf
+    <div x-show="quick" x-cloak x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-cocoa/40 p-4" x-on:keydown.escape.window="quick = false">
+        <form method="POST" action="{{ route('cashflow.store') }}" x-on:click.outside="quick = false" class="card w-full max-w-md space-y-3">
+            {{ csrf_field() }}
             <h3 class="font-display text-xl font-semibold">Catat kas cepat</h3>
             <div class="grid grid-cols-2 gap-2 text-sm font-bold">
                 <label class="cursor-pointer rounded-xl p-2 text-center" :class="type==='income' ? 'bg-mint' : 'bg-cloud'"><input type="radio" name="type" value="income" x-model="type" class="sr-only">Pemasukan</label>
@@ -115,14 +115,14 @@
             <div>
                 <label class="label">Kategori</label>
                 <select name="category" class="input">
-                    <template x-if="type==='income'"><optgroup label="Pemasukan">@foreach (App\Models\CashFlow::INCOME_CATEGORIES as $c)<option>{{ $c }}</option>@endforeach</optgroup></template>
+                    <template x-if="type==='income'"><optgroup label="Pemasukan">@foreach (array_diff(App\Models\CashFlow::INCOME_CATEGORIES, ['Penjualan Langsung']) as $c)<option>{{ $c }}</option>@endforeach</optgroup></template>
                     <template x-if="type==='expense'"><optgroup label="Pengeluaran">@foreach (App\Models\CashFlow::EXPENSE_CATEGORIES as $c)<option>{{ $c }}</option>@endforeach</optgroup></template>
                 </select>
             </div>
             <div><label class="label">Jumlah (Rp)</label><input type="number" name="amount" min="1" required class="input"></div>
             <div><label class="label">Catatan</label><input name="description" class="input" placeholder="mis. Cetak sticker batch Juni"></div>
             <div><label class="label">Tanggal</label><input type="date" name="date" value="{{ now()->toDateString() }}" class="input"></div>
-            <div class="flex justify-end gap-2"><button type="button" @click="quick=false" class="btn-soft">Batal</button><button class="btn">Simpan</button></div>
+            <div class="flex justify-end gap-2"><button type="button" x-on:click="quick=false" class="btn-soft">Batal</button><button class="btn">Simpan</button></div>
         </form>
     </div>
 </div>
